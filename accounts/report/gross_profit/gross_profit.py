@@ -89,6 +89,12 @@ def get_source_data(filters):
 		conditions += " and posting_date>=%(from_date)s"
 	if filters.get("to_date"):
 		conditions += " and posting_date<=%(to_date)s"
+	if filters.get("customer"):
+		conditions += " and customer = %(customer)s"
+	if filters.get("customer_group"):
+		conditions += " and customer_group = %(customer_group)s"
+	if filters.get("item_group"):
+		conditions += " and item_group = %(item_group)s"
 	
 	delivery_note_items = webnotes.conn.sql("""select item.parenttype, dn.name, 
 		dn.posting_date, dn.posting_time, dn.project_name, 

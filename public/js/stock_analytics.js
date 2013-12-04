@@ -43,6 +43,8 @@ erpnext.StockAnalytics = erpnext.StockGridReport.extend({
 			{id: "brand", name: "Brand", field: "brand", width: 100},
 			{id: "stock_uom", name: "UOM", field: "stock_uom", width: 100},
 			{id: "opening", name: "Opening", field: "opening", hidden: true,
+				formatter: this.currency_formatter},
+			{id: "total", name: "Total", field: "total", width:100,
 				formatter: this.currency_formatter}
 		];
 
@@ -112,6 +114,7 @@ erpnext.StockAnalytics = erpnext.StockGridReport.extend({
 		
 		this.prepare_balances();
 		this.update_groups();
+		this.set_totals();
 		
 	},
 	prepare_balances: function() {
@@ -150,6 +153,24 @@ erpnext.StockAnalytics = erpnext.StockGridReport.extend({
 					break;
 				}
 			}
+		}
+	},
+	set_totals: function() {
+		var me = this;
+		var checked = false;
+		$.each(this.data, function(i, d) { 
+			d.total = 0.0;
+			$.each(me.columns, function(i, col) {
+				if(col.formatter==me.currency_formatter && !col.hidden && col.field!="total"){
+					
+					d.total += d[col.field];
+				} 
+				if(d.checked) checked = true;
+			})
+		});
+
+		if(!this.checked) {
+			this.data[0].checked = true;
 		}
 	},
 	update_groups: function() {

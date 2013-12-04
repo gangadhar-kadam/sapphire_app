@@ -1,22 +1,21 @@
 [
  {
-  "creation": "2013-02-26 06:31:40", 
+  "creation": "2013-09-24 13:53:03", 
   "docstatus": 0, 
-  "modified": "2013-12-04 06:27:24", 
+  "modified": "2013-09-24 13:53:03", 
   "modified_by": "Administrator", 
   "owner": "Administrator"
  }, 
  {
-  "add_total_row": 1, 
   "doctype": "Report", 
   "is_standard": "Yes", 
   "name": "__common__", 
-  "ref_doctype": "Sales Invoice", 
-  "report_name": "Gross Profit", 
+  "ref_doctype": "Item", 
+  "report_name": "Item Wise Stock Details", 
   "report_type": "Script Report"
  }, 
  {
   "doctype": "Report", 
-  "name": "Gross Profit"
+  "name": "Item Wise Stock Details"
  }
 ]

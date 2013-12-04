@@ -22,5 +22,23 @@ wn.query_reports["Gross Profit"] = {
 			"fieldtype": "Date",
 			"default": wn.defaults.get_user_default("year_end_date")
 		},
+		{
+			"fieldname":"customer",
+			"label": "Customer",
+			"fieldtype": "Link",
+			"options": "Customer"
+		},
+		{
+			"fieldname":"customer_group",
+			"label": "Customer Group",
+			"fieldtype": "Link",
+			"options": "Customer Group"
+		},
+		{
+			"fieldname":"item_group",
+			"label": "Item Group",
+			"fieldtype": "Link",
+			"options": "Item Group"
+		},
 	]
 }

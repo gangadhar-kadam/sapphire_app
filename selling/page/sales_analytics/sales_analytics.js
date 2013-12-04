@@ -80,7 +80,7 @@ erpnext.SalesAnalytics = wn.views.TreeGridReport.extend({
 				formatter: this.check_formatter},
 			{id: "name", name: this.tree_grid.label, field: "name", width: 300,
 				formatter: this.tree_formatter},
-			{id: "total", name: "Total", field: "total", plot: false,
+			{id: "total", name: "Total", field: "total", plot: true,
 				formatter: this.currency_formatter}
 		];
 

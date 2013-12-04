@@ -102,6 +102,24 @@ class DocType(SellingController):
 		self.update_c_form()
 		self.update_time_log_batch(self.doc.name)
 		self.convert_to_recurring()
+		itm=[]
+		for d in getlist(self.doclist, 'entries'):
+			if(d.export_rate<d.ref_rate):
+		 		itm.append(d.item_code)
+		if(len(itm)>0):
+			prof=webnotes.conn.sql("""select distinct name from tabProfile p 
+					where docstatus < 2 and enabled = 1 
+					and name not in ("Administrator", "Guest") 
+					and exists (select * from tabUserRole ur where ur.parent = p.name 
+						and (ur.role="System Manager" or ur.role="Sales Master Manager"))""")
+			
+			msg="The following items are sold below pricelist price in Sales order : "+self.doc.name+" ,"
+			msg1=''
+			for i in itm:
+				msg1=msg1+"\n"+i
+			msg2=msg+"\n"+msg1
+			sendmail([p[0] for p in prof], subject='Items sold below pricelist', msg = msg2)		
+
 
 	def before_cancel(self):
 		self.update_time_log_batch(None)

@@ -49,6 +49,8 @@ erpnext.FinancialAnalytics = erpnext.AccountTreeGrid.extend({
 			{id: "name", name: "Account", field: "name", width: 300,
 				formatter: this.tree_formatter},
 			{id: "opening", name: "Opening", field: "opening", hidden: true,
+				formatter: this.currency_formatter},
+			{id: "total", name: "Total", field: "total", width:100,
 				formatter: this.currency_formatter}
 		];
 		
@@ -172,6 +174,7 @@ erpnext.FinancialAnalytics = erpnext.AccountTreeGrid.extend({
 
 			this.data.push(net_profit);
 		}
+		this.set_totals();
 	},
 	add_balance: function(field, account, gl) {
 		account[field] = flt(account[field]) + 
@@ -186,6 +189,24 @@ erpnext.FinancialAnalytics = erpnext.AccountTreeGrid.extend({
 			d.checked = true;
 		}
 		
+	},
+	set_totals: function() {
+		var me = this;
+		var checked = false;
+		$.each(this.data, function(i, d) { 
+			d.total = 0.0;
+			$.each(me.columns, function(i, col) {
+				if(col.formatter==me.currency_formatter && !col.hidden && col.field!="total"){
+					
+					d.total += d[col.field];
+				} 
+				if(d.checked) checked = true;
+			})
+		});
+
+		if(!this.checked) {
+			this.data[0].checked = true;
+		}
 	},
 	get_plot_data: function() {
 		var data = [];
