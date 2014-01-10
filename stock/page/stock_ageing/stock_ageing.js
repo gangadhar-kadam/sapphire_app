@@ -42,11 +42,23 @@ erpnext.StockAgeing = erpnext.StockGridReport.extend({
 			{id: "brand", name: "Brand", field: "brand", width: 100},
 			{id: "average_age", name: "Average Age", field: "average_age",
 				formatter: this.currency_formatter},
+			{id: "avg_datetime", name: "Average Date", field: "avg_datetime", width: 120,
+                                formatter: this.text_formatter},
 			{id: "earliest", name: "Earliest", field: "earliest",
 				formatter: this.currency_formatter},
+			{id: "earliest_datetime", name: "Earliest Date", field: "earliest_datetime", width: 120,
+				formatter: this.text_formatter},
 			{id: "latest", name: "Latest", field: "latest",
 				formatter: this.currency_formatter},
+			{id: "latest_datetime", name: "Latest Date", field: "latest_datetime", width: 120,
+                                formatter: this.text_formatter},
+			{id: "difference", name: "Difference", field: "difference", width: 100, 
+				formatter: this.text_formatter},
 			{id: "stock_uom", name: "UOM", field: "stock_uom", width: 100},
+			{id: "sell_through_rate", name: "Sell Through Rate", field: "sell_through_rate",
+				width: 200},
+			{id:"order_on", name: "Order On", field: "order_on",
+				width:200},
 		];
 	},
 	filters: [
@@ -58,6 +70,7 @@ erpnext.StockAgeing = erpnext.StockGridReport.extend({
 			}, link_formatter: {filter_input: "brand"}},
 		{fieldtype:"Select", label: "Plot By", 
 			options: ["Average Age", "Earliest", "Latest"]},
+		{fieldtype:"Date", label:"From Date"},
 		{fieldtype:"Date", label: "To Date"},
 		{fieldtype:"Button", label: "Refresh", icon:"icon-refresh icon-white", cssClass:"btn-info"},
 		{fieldtype:"Button", label: "Reset Filters"}
@@ -105,10 +118,34 @@ erpnext.StockAgeing = erpnext.StockGridReport.extend({
 		var to_date = dateutil.str_to_obj(this.to_date);
 		var data = wn.report_dump.data["Stock Ledger Entry"];
 
+		var dict= {} ;
+		var dict1={};
+		var qt,qt_days = 0;
+
 		this.item_warehouse = {};
 
 		for(var i=0, j=data.length; i<j; i++) {
 			var sl = data[i];
+			if(sl.voucher_type=='Delivery Note' && sl.posting_date>= this.from_date && sl.posting_date <= this.to_date){	
+				if(!dict[sl.item_code]){
+					qt += parseFloat(sl.qty)
+					dict[sl.item_code] = qt;
+				}
+				else{
+					dict[sl.item_code] = parseFloat(dict[sl.item_code] + sl.qty)
+				}
+			}
+			if(sl.item_code)
+			{
+					if(!dict1[sl.item_code]){
+					qt_days += parseFloat(sl.qty)
+					dict1[sl.item_code] = qt_days;
+				}
+				else{
+					dict1[sl.item_code] = parseFloat(dict1[sl.item_code] + sl.qty)
+				}
+			}
+
 			var posting_date = dateutil.str_to_obj(sl.posting_date);
 			
 			if(me.is_default("warehouse") ? true : me.warehouse == sl.warehouse) {
@@ -120,6 +157,8 @@ erpnext.StockAgeing = erpnext.StockGridReport.extend({
 				if(posting_date > to_date) 
 					break;
 			}
+		qt=0;
+		qt_days=0;
 		}
 		
 		$.each(me.data, function(i, item) {
@@ -146,8 +185,41 @@ erpnext.StockAgeing = erpnext.StockGridReport.extend({
 			
 			item.average_age = total_qty.toFixed(2)==0.0 ? 0 
 				: (age_qty / total_qty).toFixed(2);
+			var early=new Date()
+			early.setDate(new Date().getDate() - max_age);
+
+			var latest=new Date()
+            		latest.setDate(new Date().getDate() - min_age);
+
+			var avg_date_=new Date(early.getFullYear()+'-'+(early.getMonth()+1)+'-'+early.getDate())
+			avg_date_.setDate(avg_date_.getDate() + parseInt((max_age-min_age)/2))
+
+			item.avg_datetime=avg_date_.getDate()+'-'+(avg_date_.getMonth()+1)+'-'+avg_date_.getFullYear()
+			item.earliest_datetime=early.getDate()+'-'+(early.getMonth()+1)+'-'+early.getFullYear()
+			item.latest_datetime=latest.getDate()+'-'+(latest.getMonth()+1)+'-'+latest.getFullYear()
+
 			item.earliest = max_age || 0.0;
 			item.latest = min_age || 0.0;
+			item.sell_through_rate = 0;
+			
+			item.difference = parseInt(max_age) - parseInt(min_age)
+			if(dict[item.name]){
+				var diff_= dateutil.get_diff(dateutil.str_to_obj(me.to_date), dateutil.str_to_obj(me.from_date))
+				item.sell_through_rate = ((parseFloat(dict[item.name]) * -1)/ parseFloat(diff_)).toFixed(2)
+			}
+
+			item.order_on="";	
+			if(item.sell_through_rate>0){
+				var order_days = 0 ;
+				var order_date = new Date();
+				var days = dict1[item.name]/item.sell_through_rate;
+				order_days = days + 0; 
+				if(item.lead_time_days){
+					order_days = days - item.lead_time_days;
+				}
+				item.order_on = wn.datetime.add_days(me.to_date, parseInt(order_days))
+			}
+			
 		});
 		
 		this.data = this.data.sort(function(a, b) { 

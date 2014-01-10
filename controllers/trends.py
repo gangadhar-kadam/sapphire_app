@@ -34,6 +34,9 @@ def validate_filters(filters):
 	
 	if filters.get("based_on") == filters.get("group_by"):
 		webnotes.msgprint("'Based On' and 'Group By' can not be same", raise_exception=1)
+	
+	if filters.get('from_date') > filters.get('to_date'):
+		webnotes.msgprint("From Date should not greater than To Data", raise_exception=1)
 
 def get_data(filters, conditions):
 	data = []
@@ -53,6 +56,12 @@ def get_data(filters, conditions):
 			sel_col = 't1.customer'
 		elif filters.get("group_by") == 'Supplier':
 			sel_col = 't1.supplier'
+		elif filters.get("group_by") == 'Warehouse':
+			sel_col = "t2.warehouse"
+		elif filters.get("group_by") == 'Customer Group':
+			sel_col = 't1.customer_group'
+		elif filters.get('group_by') == 'Item Code':
+			sel_col = 't2.item_code'
 
 		if filters.get('based_on') in ['Item','Customer','Supplier']:
 			inc = 2
@@ -119,6 +128,12 @@ def period_wise_colums_query(filters, trans):
 	query_details = ''
 	pwc = []
 	bet_dates = get_period_date_ranges(filters.get("period"), filters.get("fiscal_year"))
+	
+	if filters.get('period') == 'Flexible':
+		if filters.get('from_date') and filters.get('to_date') :	
+			bet_dates = [[getdate(filters.get('from_date')), getdate(filters.get('to_date'))]]
+		else:
+			webnotes.msgprint("From Date and To Date is mandetory ",raise_exception=1)
 
 	if trans in ['Purchase Receipt', 'Delivery Note', 'Purchase Invoice', 'Sales Invoice']:
 		trans_date = 'posting_date'
@@ -134,7 +149,16 @@ def period_wise_colums_query(filters, trans):
 			filters.get("fiscal_year") + " (Amt):Currency:120"]
 		query_details = " SUM(t2.qty), SUM(t1.grand_total),"
 
-	query_details += 'SUM(t2.qty), SUM(t1.grand_total)'
+	if filters.get('period') == 'Flexible':
+		if filters.get('from_date') and filters.get('to_date') :	
+			query_details += """SUM(IF(t1.%(trans_date)s BETWEEN '%(sd)s' AND '%(ed)s', t2.qty, NULL)),
+					SUM(IF(t1.%(trans_date)s BETWEEN '%(sd)s' AND '%(ed)s', t1.grand_total, NULL))
+				"""% {"trans_date": trans_date, "sd": bet_dates[0][0],"ed": bet_dates[0][1]}
+		else:
+			webnotes.msgprint("From Date and To Date is mandetory ",raise_exception=1)
+	else:
+		query_details += 'SUM(t2.qty), SUM(t1.grand_total)'
+
 	return pwc, query_details
 
 def get_period_wise_columns(bet_dates, period, pwc):
@@ -159,7 +183,8 @@ def get_period_date_ranges(period, fiscal_year):
     "Monthly": 1,
     "Quarterly": 3,
     "Half-Yearly": 6,
-    "Yearly": 12
+    "Yearly": 12,
+    "Flexible": 12
   }.get(period)
 
   period_date_ranges = []
@@ -188,8 +213,14 @@ def based_wise_colums_query(based_on, trans):
 
 	# based_on_cols, based_on_select, based_on_group_by, addl_tables
 	if based_on == "Item":
-		based_on_details["based_on_cols"] = ["Item:Link/Item:120", "Item Name:Data:120"]
+		based_on_details["based_on_cols"] = ["Item :Link/Item:120", "Item Name:Data:120"]
 		based_on_details["based_on_select"] = "t2.item_code, t2.item_name," 
+		based_on_details["based_on_group_by"] = 't2.item_code'
+		based_on_details["addl_tables"] = ''
+
+	elif based_on == "Item Code":
+		based_on_details["based_on_cols"] = ["Item Code:Link/Item:120"]
+		based_on_details["based_on_select"] = "t2.item_code," 
 		based_on_details["based_on_group_by"] = 't2.item_code'
 		based_on_details["addl_tables"] = ''
 
@@ -242,11 +273,19 @@ def based_wise_colums_query(based_on, trans):
 			based_on_details["addl_tables"] = ''
 		else:
 			webnotes.msgprint("Project-wise data is not available for Quotation", raise_exception=1)
+	
+	elif based_on == "Warehouse":
+		based_on_details["based_on_cols"] = ["Warehouse:Link/Warehouse:120"]
+		based_on_details["based_on_select"] = "t2.warehouse,"
+		based_on_details["based_on_group_by"] = 't2.warehouse'
+		based_on_details["addl_tables"] = ''
 
 	return based_on_details
 
 def group_wise_column(group_by):
 	if group_by:
+		if group_by == 'Item Code':
+			group_by = 'Item'
 		return [group_by+":Link/"+group_by+":120"]
 	else:
 		return []

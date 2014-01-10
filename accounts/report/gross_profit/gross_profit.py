@@ -93,8 +93,8 @@ def get_source_data(filters):
 		conditions += " and customer = %(customer)s"
 	if filters.get("customer_group"):
 		conditions += " and customer_group = %(customer_group)s"
-	if filters.get("item_group"):
-		conditions += " and item_group = %(item_group)s"
+	if filters.get("item_group") and filters.get("item_group") != 'All Item Groups':
+		conditions += " and item_group=%(item_group)s"
 	
 	delivery_note_items = webnotes.conn.sql("""select item.parenttype, dn.name, 
 		dn.posting_date, dn.posting_time, dn.project_name, 
@@ -103,7 +103,7 @@ def get_source_data(filters):
 		timestamp(dn.posting_date, dn.posting_time) as posting_datetime
 		from `tabDelivery Note` dn, `tabDelivery Note Item` item
 		where item.parent = dn.name and dn.docstatus = 1 %s
-		order by dn.posting_date desc, dn.posting_time desc""" % (conditions,), filters, as_dict=1)
+		order by dn.posting_date desc, dn.posting_time desc""" % (conditions,), filters, as_dict=1,debug=1)
 
 	sales_invoice_items = webnotes.conn.sql("""select item.parenttype, si.name, 
 		si.posting_date, si.posting_time, si.project_name,
