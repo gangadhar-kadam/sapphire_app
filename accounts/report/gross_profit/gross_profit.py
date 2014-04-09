@@ -17,7 +17,7 @@ def execute(filters=None):
 		"Item Code:Link/Item", "Item Name", "Description", "Warehouse:Link/Warehouse",
 		"Qty:Float", "Selling Rate:Currency", "Avg. Buying Rate:Currency", 
 		"Selling Amount:Currency", "Buying Amount:Currency",
-		"Gross Profit:Currency", "Gross Profit %:Percent", "Project:Link/Project"]
+		"Gross Profit:Currency", "Gross Profit %:Percent",  "Gross Margin::80", "Project:Link/Project"]
 	data = []
 	for row in source:
 		selling_amount = flt(row.amount)
@@ -38,7 +38,9 @@ def execute(filters=None):
 			gross_profit_percent = (gross_profit / selling_amount) * 100.0
 		else:
 			gross_profit_percent = 0.0
-		
+
+		gross_margin = get_gross_margin(row, buying_amount)
+
 		icon = """<a href="%s"><i class="icon icon-share" style="cursor: pointer;"></i></a>""" \
 			% ("/".join(["#Form", row.parenttype, row.name]),)
 		data.append([row.name, icon, row.posting_date, row.posting_time, row.item_code, row.item_name,
@@ -47,6 +49,22 @@ def execute(filters=None):
 			gross_profit, gross_profit_percent, row.project])
 			
 	return columns, data
+
+def get_gross_margin(row, buying_amount):
+	gross_margin = 0.0
+	# cost_price = webnotes.conn.sql(""" select sum(import_rate)/2 from (
+	# 			select  pri.import_rate from `tabPurchase Receipt` pr, `tabPurchase Receipt Item` pri 
+	# 			where pri.parent = pr.name 
+	# 				and item_code = '%(item_code)s' 
+	# 				and warehouse = '%(warehouse)s' 
+	# 			order by pr.modified desc 
+	# 			limit 2
+	# 		)foo """%{'item_code':row.item_code, 'warehouse':row.warehouse},as_list=1,debug=1)
+	# if flt(cost_price[0][0]) != 0:
+	# 	webnotes.errprint(row.export_rate)
+	if row.qty:
+		gross_margin = ((flt(row.export_rate) - flt((buying_amount / row.qty)) ) / flt((buying_amount / row.qty)))*100
+	return gross_margin
 	
 def get_stock_ledger_entries(filters):	
 	query = """select item_code, voucher_type, voucher_no,
@@ -91,10 +109,22 @@ def get_source_data(filters):
 		conditions += " and posting_date<=%(to_date)s"
 	if filters.get("customer"):
 		conditions += " and customer = %(customer)s"
+
 	if filters.get("customer_group"):
-		conditions += " and customer_group = %(customer_group)s"
+		conditions += """ and customer_group in (SELECT node.name
+					FROM `tabCustomer Group` AS node,
+						`tabCustomer Group` AS parent
+					WHERE node.lft BETWEEN parent.lft AND parent.rgt
+						AND parent.name = %(customer_group)s
+					ORDER BY node.lft)"""
+
 	if filters.get("item_group") and filters.get("item_group") != 'All Item Groups':
-		conditions += " and item_group=%(item_group)s"
+		conditions += """ and item_group in (SELECT node.name
+					FROM `tabItem Group` AS node,
+						`tabItem Group` AS parent
+					WHERE node.lft BETWEEN parent.lft AND parent.rgt
+						AND parent.name = %(item_group)s
+					ORDER BY node.lft)"""
 	
 	delivery_note_items = webnotes.conn.sql("""select item.parenttype, dn.name, 
 		dn.posting_date, dn.posting_time, dn.project_name, 

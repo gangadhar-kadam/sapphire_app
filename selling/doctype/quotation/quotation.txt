@@ -2,7 +2,7 @@
  {
   "creation": "2013-05-24 19:29:08", 
   "docstatus": 0, 
-  "modified": "2013-10-11 13:21:07", 
+  "modified": "2014-04-04 14:54:43", 
   "modified_by": "Administrator", 
   "owner": "Administrator"
  }, 
@@ -35,9 +35,7 @@
   "parent": "Quotation", 
   "parentfield": "permissions", 
   "parenttype": "DocType", 
-  "permlevel": 0, 
-  "read": 1, 
-  "report": 1
+  "read": 1
  }, 
  {
   "doctype": "DocType", 
@@ -848,6 +846,8 @@
   "cancel": 1, 
   "create": 1, 
   "doctype": "DocPerm", 
+  "permlevel": 0, 
+  "report": 1, 
   "role": "Sales Manager", 
   "submit": 1, 
   "write": 1
@@ -857,24 +857,19 @@
   "cancel": 1, 
   "create": 1, 
   "doctype": "DocPerm", 
+  "permlevel": 0, 
+  "report": 1, 
   "role": "Sales User", 
   "submit": 1, 
   "write": 1
- }, 
- {
-  "amend": 0, 
-  "cancel": 0, 
-  "create": 0, 
-  "doctype": "DocPerm", 
-  "role": "Customer", 
-  "submit": 0, 
-  "write": 0
  }, 
  {
   "amend": 1, 
   "cancel": 1, 
   "create": 1, 
   "doctype": "DocPerm", 
+  "permlevel": 0, 
+  "report": 1, 
   "role": "Maintenance Manager", 
   "submit": 1, 
   "write": 1
@@ -884,8 +879,65 @@
   "cancel": 1, 
   "create": 1, 
   "doctype": "DocPerm", 
+  "permlevel": 0, 
+  "report": 1, 
   "role": "Maintenance User", 
   "submit": 1, 
   "write": 1
+ }, 
+ {
+  "amend": 1, 
+  "cancel": 1, 
+  "create": 1, 
+  "doctype": "DocPerm", 
+  "match": "territory", 
+  "permlevel": 0, 
+  "report": 1, 
+  "role": "Partner", 
+  "submit": 1, 
+  "write": 1
+ }, 
+ {
+  "amend": 1, 
+  "cancel": 1, 
+  "create": 1, 
+  "doctype": "DocPerm", 
+  "match": "customer_group", 
+  "permlevel": 0, 
+  "report": 1, 
+  "role": "Partner", 
+  "submit": 1, 
+  "write": 1
+ }, 
+ {
+  "amend": 1, 
+  "cancel": 1, 
+  "create": 1, 
+  "doctype": "DocPerm", 
+  "match": "owner", 
+  "permlevel": 0, 
+  "report": 1, 
+  "role": "Partner", 
+  "submit": 1, 
+  "write": 1
+ }, 
+ {
+  "doctype": "DocPerm", 
+  "permlevel": 1, 
+  "role": "Maintenance Manager", 
+  "write": 1
+ }, 
+ {
+  "doctype": "DocPerm", 
+  "permlevel": 1, 
+  "role": "Sales Manager", 
+  "write": 1
+ }, 
+ {
+  "doctype": "DocPerm", 
+  "match": "owner", 
+  "permlevel": 0, 
+  "report": 1, 
+  "role": "Customer"
  }
 ]

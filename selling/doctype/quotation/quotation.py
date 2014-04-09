@@ -218,6 +218,14 @@ def _make_sales_order(source_name, target_doclist=None, ignore_permissions=False
 					"parent": "prevdoc_docname"
 				}
 			}, 
+
+			 "Sales Team Details": {
+                               "doctype": "Sales Team", 
+                               "field_map": {
+                                       "parent": "prevdoc_docname"
+                               }
+                       },
+
 			"Sales Taxes and Charges": {
 				"doctype": "Sales Taxes and Charges",
 				"add_if_empty": True

@@ -206,24 +206,64 @@ class DocType(SellingController):
 		self.update_prevdoc_status('submit')
 		webnotes.conn.set(self.doc, 'status', 'Submitted')
                 # --gangadhar for email alert if item sold below cost price.
-		from webnotes.utils.email_lib import sendmail
-                itm=[]
-                for d in getlist(self.doclist, 'sales_order_details'):
-                        if(d.export_rate<d.ref_rate):
-                                itm.append(d.item_code)
-                if(len(itm)>0):
-                        prof=webnotes.conn.sql("""select distinct name from tabProfile p 
-                                        where docstatus < 2 and enabled = 1 
-                                        and name not in ("Administrator", "Guest") 
-                                        and exists (select * from tabUserRole ur where ur.parent = p.name 
-                                                and (ur.role="System Manager" or ur.role="Sales Master Manager"))""")
+		self.check_cost_price()
 
-                        msg="The following items are sold below pricelist price in Sales order : "+self.doc.name+" ,"
-                        msg1=''
-                        for i in itm:
-                                msg1=msg1+"\n"+i
-                        msg2=msg+"\n"+msg1
-                        sendmail([p[0] for p in prof], subject='Items sold below pricelist', msg = msg2)
+	def check_cost_price(self):
+		item_dict = {}
+		for d in getlist(self.doclist, 'sales_order_details'):
+			cost_price = webnotes.conn.sql(""" select sum(import_rate)/2 from (
+				select  pri.import_rate from `tabPurchase Receipt` pr, `tabPurchase Receipt Item` pri 
+				where pri.parent = pr.name 
+					and item_code = '%(item_code)s' 
+					and warehouse = '%(warehouse)s' 
+				order by pr.modified desc 
+				limit 2
+			)foo """%{'item_code':d.item_code, 'warehouse':d.reserved_warehouse},as_list=1, debug=1)
+			
+			if(d.export_rate < flt(cost_price[0][0])):
+				item_dict.setdefault(d.item_code, {})
+				item_dict[d.item_code]['item_code'] = d.item_code
+				item_dict[d.item_code]['selling_price'] = d.export_rate
+				item_dict[d.item_code]['buying_price'] = cost_price[0][0]
+				item_dict[d.item_code]['qty'] = d.qty
+				item_dict[d.item_code]['gross_margin'] = ((flt(d.export_rate) - flt(cost_price[0][0]) ) / flt(cost_price[0][0]))*100
+
+		self.send_mail(item_dict)
+
+	def send_mail(self, items):
+		from webnotes.utils.email_lib import sendmail
+		if(len(items)>0):
+			rows = ''
+
+			prof=webnotes.conn.sql("""select distinct name from tabProfile p 
+				where docstatus < 2 and enabled = 1 
+					and name not in ("Administrator", "Guest") 
+					and exists (select * from tabUserRole ur where ur.parent = p.name 
+					and (ur.role="System Manager" or ur.role="Sales Master Manager"))""",as_list=1)
+
+			message = """  Salse Order %(name)s, for customer %(customer)s contains some items which are sold below cost price. 
+				List of those items is as follow: <table>
+						<tr>
+							<th>Item Code</th>
+							<th>Quantity</th>
+							<th>Buying price</th>
+							<th>Selling price</th>
+							<th>Gross Margine</th>
+						</tr>
+					 %(rows)s  </table>"""
+
+			tab_rows = """<tr>
+						<td>%(item_code)s</td>
+						<td>%(qty)s</td>
+						<td>%(buying_price)s</td>
+						<td>%(selling_price)s</td>
+						<td>%(gross_margin)s</td>
+					</tr>"""
+
+			for item in items:
+				rows += tab_rows%items[item]
+
+			sendmail([p[0] for p in prof], subject='Items sold below Cost Price', msg = message%{'name':self.doc.name, 'customer': self.doc.customer, 'rows': rows})
 
 
 	

@@ -26,7 +26,7 @@ class DocType:
             return "created customer :-"+store
 
 
-        def create_so(self,customer,delivery_date,currency,customer_group,territory,price_list_name,price_list_currency,company,fiscal_year,plc_conversion_rate,po_no,items):
+        def create_so(self,customer,delivery_date,currency,customer_group,territory,price_list_name,price_list_currency,company,fiscal_year,plc_conversion_rate,po_no,items,status1,tot):
           ss=Document('Sales Order')
           ss.naming_series='SO'
           ss.customer=customer
@@ -34,7 +34,7 @@ class DocType:
           ss.delivery_date=datetime.strptime(delivery_date,"%Y-%m-%d").date()
           ss.currency=currency
           ss.customer_group=customer_group
-          ss.price_list_name='Operator MTN'
+          ss.selling_price_list='Operator MTN'
           ss.price_list_currency=price_list_currency
           ss.company=company
           ss.territory='Lagos'

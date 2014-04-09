@@ -18,17 +18,17 @@ def get_columns(filters):
 		msgprint(_("Please select the document type first"), raise_exception=1)
 		
 	return [filters["doc_type"] + ":Link/" + filters["doc_type"] + ":140", 
-		"Customer:Link/Customer:140", "Territory:Link/Territory:100", "Posting Date:Date:100", 
+		"Customer:Link/Customer:140","Customer Group:Link/Customer Group:140", "Territory:Link/Territory:100", "Posting Date:Date:100", 
 		"Item Code:Link/Item:120", "Qty:Float:100", "Amount:Currency:120", 
-		"Sales Person:Link/Sales Person:140", "Contribution %:Float:110", 
+		"Sales Person:Link/Sales Person:140", "Contribution %:Float:110", "Project:Link/Project:140",
 		"Contribution Amount:Currency:140"]
 	
 def get_entries(filters):
 	date_field = filters["doc_type"] == "Sales Order" and "transaction_date" or "posting_date"
 	conditions, items = get_conditions(filters, date_field)
-	entries = webnotes.conn.sql("""select dt.name, dt.customer, dt.territory, dt.%s, 
+	entries = webnotes.conn.sql("""select dt.name, dt.customer,dt.customer_group, dt.territory, dt.%s, 
 		dt_item.item_code, dt_item.qty, dt_item.amount, st.sales_person, 
-		st.allocated_percentage, dt_item.amount*st.allocated_percentage/100
+		st.allocated_percentage,dt.project_name, dt_item.amount*st.allocated_percentage/100
 		from `tab%s` dt, `tab%s Item` dt_item, `tabSales Team` st 
 		where st.parent = dt.name and dt.name = dt_item.parent and st.parenttype = '%s' 
 		and dt.docstatus = 1 %s order by st.sales_person, dt.name desc""" % 
@@ -42,7 +42,8 @@ def get_conditions(filters, date_field):
 	if filters.get("company"): conditions += " and dt.company = '%s'" % filters["company"]
 	if filters.get("customer"): conditions += " and dt.customer = '%s'" % filters["customer"]
 	if filters.get("territory"): conditions += " and dt.territory = '%s'" % filters["territory"]
-	
+	if filters.get("project_name"): conditions += " and dt.project_name = '%s'" % filters["project_name"]
+	if filters.get("customer_group"): conditions += " and dt.customer_group = '%s'" % filters["customer_group"]
 	if filters.get("from_date"): conditions += " and dt.%s >= '%s'" % \
 		(date_field, filters["from_date"])
 	if filters.get("to_date"): conditions += " and dt.%s <= '%s'" % (date_field, filters["to_date"])
