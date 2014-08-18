@@ -232,6 +232,8 @@ items = [
 		"route": "Form/Backup Manager", "type": "Link", "icon": "icon-cloud" },
 	{ "title": "System Scheduler Errors", 
 		"route": "Report/Scheduler Log", "type": "Link", "icon": "icon-exclamation-sign" },
+	{ "title": "Notification Setting", 
+		"route": "Form/Notification Setting", "type": "Link", "icon": "icon-exclamation-sign" },
 ]
 
 @webnotes.whitelist(allow_roles=["System Manager"])

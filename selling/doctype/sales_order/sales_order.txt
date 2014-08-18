@@ -2,7 +2,7 @@
  {
   "creation": "2013-06-18 12:39:59", 
   "docstatus": 0, 
-  "modified": "2013-10-11 13:18:47", 
+  "modified": "2014-04-30 11:05:33", 
   "modified_by": "Administrator", 
   "owner": "Administrator"
  }, 
@@ -33,7 +33,6 @@
   "parent": "Sales Order", 
   "parentfield": "permissions", 
   "parenttype": "DocType", 
-  "permlevel": 0, 
   "read": 1
  }, 
  {
@@ -137,6 +136,14 @@
   "options": "\nSales\nMaintenance", 
   "print_hide": 1, 
   "reqd": 1
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "sales_channel_name", 
+  "fieldtype": "Link", 
+  "label": "Sales Channel Name", 
+  "options": "Sales Channel", 
+  "read_only": 0
  }, 
  {
   "doctype": "DocField", 
@@ -901,32 +908,97 @@
   "print_hide": 1
  }, 
  {
-  "amend": 1, 
-  "cancel": 1, 
-  "create": 1, 
+  "amend": 0, 
+  "cancel": 0, 
+  "create": 0, 
   "doctype": "DocPerm", 
-  "report": 1, 
-  "role": "Sales User", 
-  "submit": 1, 
-  "write": 1
+  "permlevel": 1, 
+  "report": 0, 
+  "role": "Sales Manager", 
+  "submit": 0, 
+  "write": 0
  }, 
  {
   "amend": 1, 
   "cancel": 1, 
   "create": 1, 
   "doctype": "DocPerm", 
+  "permlevel": 0, 
+  "report": 1, 
+  "role": "Sales Manager", 
+  "submit": 1, 
+  "write": 1
+ }, 
+ {
+  "amend": 0, 
+  "cancel": 0, 
+  "create": 0, 
+  "doctype": "DocPerm", 
+  "permlevel": 0, 
+  "report": 1, 
+  "role": "Sales User", 
+  "submit": 0, 
+  "write": 0
+ }, 
+ {
+  "amend": 0, 
+  "cancel": 0, 
+  "create": 0, 
+  "doctype": "DocPerm", 
+  "permlevel": 1, 
+  "report": 0, 
+  "role": "Sales User", 
+  "submit": 0, 
+  "write": 0
+ }, 
+ {
+  "amend": 1, 
+  "cancel": 1, 
+  "create": 1, 
+  "doctype": "DocPerm", 
+  "permlevel": 0, 
+  "report": 1, 
+  "role": "Maintenance Manager", 
+  "submit": 1, 
+  "write": 1
+ }, 
+ {
+  "amend": 0, 
+  "cancel": 0, 
+  "create": 0, 
+  "doctype": "DocPerm", 
+  "permlevel": 1, 
+  "report": 0, 
+  "role": "Maintenance Manager", 
+  "submit": 0, 
+  "write": 0
+ }, 
+ {
+  "amend": 1, 
+  "cancel": 1, 
+  "create": 1, 
+  "doctype": "DocPerm", 
+  "permlevel": 0, 
   "report": 1, 
   "role": "Maintenance User", 
   "submit": 1, 
   "write": 1
  }, 
  {
+  "amend": 0, 
+  "cancel": 0, 
+  "create": 0, 
   "doctype": "DocPerm", 
-  "role": "Accounts User"
+  "permlevel": 1, 
+  "report": 0, 
+  "role": "Maintenance User", 
+  "submit": 0, 
+  "write": 0
  }, 
  {
   "doctype": "DocPerm", 
-  "match": "customer", 
+  "match": "owner", 
+  "permlevel": 0, 
   "role": "Customer"
  }
 ]

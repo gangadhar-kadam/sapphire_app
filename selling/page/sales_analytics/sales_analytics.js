@@ -21,7 +21,7 @@ erpnext.SalesAnalytics = wn.views.TreeGridReport.extend({
 			page: wrapper,
 			parent: $(wrapper).find('.layout-main'),
 			appframe: wrapper.appframe,
-			doctypes: ["Item", "Item Group", "Customer", "Customer Group", "Company", "Territory", 
+			doctypes: ["Item", "Item Group", "Customer","Sales Channel", "Customer Group", "Company", "Territory", 
 				"Fiscal Year", "Sales Invoice", "Sales Invoice Item", 
 				"Sales Order", "Sales Order Item[Sales Analytics]", 
 				"Delivery Note", "Delivery Note Item[Sales Analytics]"],
@@ -96,6 +96,7 @@ erpnext.SalesAnalytics = wn.views.TreeGridReport.extend({
 		{fieldtype:"Select", label: "Based On", options:["Sales Invoice", 
 			"Sales Order", "Delivery Note"]},
 		{fieldtype:"Select", label: "Value or Qty", options:["Value", "Quantity"]},
+		{fieldtype:"Select", label: "Sales Channel Name",link:"Sales Channel",default_value: ""},
 		{fieldtype:"Select", label: "Company", link:"Company", 
 			default_value: "Select Company..."},
 		{fieldtype:"Date", label: "From Date"},
@@ -110,7 +111,7 @@ erpnext.SalesAnalytics = wn.views.TreeGridReport.extend({
 		var me = this;
 		this._super();
 		
-		this.trigger_refresh_on_change(["value_or_qty", "tree_type", "based_on", "company"]);
+		this.trigger_refresh_on_change(["value_or_qty", "tree_type", "based_on", "company","sales_channel_name"]);
 
 		this.show_zero_check()		
 		this.setup_plot_check();
@@ -196,13 +197,34 @@ erpnext.SalesAnalytics = wn.views.TreeGridReport.extend({
 		var is_val = this.value_or_qty == 'Value';
 		
 		$.each(this.tl[this.based_on], function(i, tl) {
-			if (me.is_default('company') ? true : tl.company === me.company) { 
+			/*if (me.is_default('company') ? true : tl.company === me.company) { 
 				var posting_date = dateutil.str_to_obj(tl.posting_date);
 				if (posting_date >= from_date && posting_date <= to_date) {
 					var item = me.item_by_name[tl[me.tree_grid.item_key]] || 
 						me.item_by_name['Not Set'];
 					item[me.column_map[tl.posting_date].field] += (is_val ? tl.amount : tl.qty);
 				}
+			}*/
+			if(me.sales_channel_name){
+				if (me.is_default('company') ? true : tl.company === me.company) { 
+					var posting_date = dateutil.str_to_obj(tl.posting_date);
+					if (posting_date >= from_date && posting_date <= to_date && tl.sales_channel_name===me.sales_channel_name) {
+						var item = me.item_by_name[tl[me.tree_grid.item_key]] || 
+						me.item_by_name['Not Set'];
+						item[me.column_map[tl.posting_date].field] += (is_val ? tl.amount : tl.qty);
+					}
+				}
+			}
+			else
+			{
+				if (me.is_default('company') ? true : tl.company === me.company) { 
+					var posting_date = dateutil.str_to_obj(tl.posting_date);
+					if (posting_date >= from_date && posting_date <= to_date) {
+						var item = me.item_by_name[tl[me.tree_grid.item_key]] || 
+						me.item_by_name['Not Set'];
+						item[me.column_map[tl.posting_date].field] += (is_val ? tl.amount : tl.qty);
+					}
+				}	
 			}
 		});
 	},

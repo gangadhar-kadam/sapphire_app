@@ -2,7 +2,7 @@
  {
   "creation": "2013-05-24 19:29:05", 
   "docstatus": 0, 
-  "modified": "2013-10-11 13:12:38", 
+  "modified": "2014-04-30 11:06:07", 
   "modified_by": "Administrator", 
   "owner": "Administrator"
  }, 
@@ -33,9 +33,7 @@
   "parent": "Sales Invoice", 
   "parentfield": "permissions", 
   "parenttype": "DocType", 
-  "permlevel": 0, 
-  "read": 1, 
-  "report": 1
+  "read": 1
  }, 
  {
   "doctype": "DocType", 
@@ -119,6 +117,14 @@
   "label": "Contact Email", 
   "print_hide": 1, 
   "read_only": 1
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "sales_channel_name", 
+  "fieldtype": "Link", 
+  "label": "Sales Channel Name", 
+  "options": "Sales Channel", 
+  "read_only": 0
  }, 
  {
   "doctype": "DocField", 
@@ -1202,26 +1208,67 @@
   "report_hide": 1
  }, 
  {
+  "amend": 0, 
+  "cancel": 0, 
+  "create": 0, 
+  "doctype": "DocPerm", 
+  "permlevel": 1, 
+  "report": 0, 
+  "role": "Accounts Manager", 
+  "submit": 0, 
+  "write": 0
+ }, 
+ {
   "amend": 1, 
   "cancel": 1, 
   "create": 1, 
   "doctype": "DocPerm", 
+  "permlevel": 0, 
+  "report": 1, 
   "role": "Accounts Manager", 
   "submit": 1, 
   "write": 1
  }, 
  {
   "amend": 1, 
-  "cancel": 0, 
+  "cancel": 1, 
   "create": 1, 
   "doctype": "DocPerm", 
+  "permlevel": 0, 
+  "report": 1, 
   "role": "Accounts User", 
   "submit": 1, 
   "write": 1
  }, 
  {
+  "amend": 0, 
+  "cancel": 0, 
+  "create": 0, 
+  "doctype": "DocPerm", 
+  "permlevel": 1, 
+  "report": 0, 
+  "role": "Accounts User", 
+  "submit": 0, 
+  "write": 0
+ }, 
+ {
+  "doctype": "DocPerm", 
+  "match": "owner", 
+  "permlevel": 0, 
+  "role": "Customer"
+ }, 
+ {
+  "doctype": "DocPerm", 
+  "match": "customer_group", 
+  "permlevel": 0, 
+  "report": 1, 
+  "role": "Supplier Role"
+ }, 
+ {
   "doctype": "DocPerm", 
   "match": "customer", 
-  "role": "Customer"
+  "permlevel": 0, 
+  "report": 1, 
+  "role": "Slot Manager"
  }
 ]

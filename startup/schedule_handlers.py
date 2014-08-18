@@ -12,6 +12,7 @@ def execute_all():
 		* get support email
 		* recurring invoice
 	"""
+        #print "all"
 	# pull emails
 	from support.doctype.support_ticket.get_support_mails import get_support_mails
 	run_fn(get_support_mails)
@@ -24,6 +25,9 @@ def execute_all():
 
 	from webnotes.utils.email_lib.bulk import flush
 	run_fn(flush)
+
+	from core.doctype.notification_setting.credit_days_notification import check_period
+	run_fn(check_period)
 	
 def execute_daily():
 	# event reminders

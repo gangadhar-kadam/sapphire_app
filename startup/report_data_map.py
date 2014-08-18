@@ -155,6 +155,11 @@ data_map = {
 			"parent_territory": ["Territory", "name"],
 		}
 	},
+	"Sales Channel": {
+		"columns": ["name"],
+		"conditions": ["docstatus < 2"],
+		"order_by": "name"
+	},
 	"Customer Group": {
 		"columns": ["name", "parent_customer_group"],
 		"conditions": ["docstatus < 2"],
@@ -166,7 +171,7 @@ data_map = {
 		"order_by": "lft"
 	},
 	"Sales Invoice": {
-		"columns": ["name", "customer", "posting_date", "company"],
+		"columns": ["name", "customer", "posting_date", "company","sales_channel_name"],
 		"conditions": ["docstatus=1"],
 		"order_by": "posting_date",
 		"links": {
@@ -184,7 +189,7 @@ data_map = {
 		}
 	},
 	"Sales Order": {
-		"columns": ["name", "customer", "transaction_date as posting_date", "company"],
+		"columns": ["name", "customer", "transaction_date as posting_date", "company","sales_channel_name"],
 		"conditions": ["docstatus=1"],
 		"order_by": "transaction_date",
 		"links": {
@@ -202,7 +207,7 @@ data_map = {
 		}
 	},
 	"Delivery Note": {
-		"columns": ["name", "customer", "posting_date", "company"],
+		"columns": ["name", "customer", "posting_date", "company","sales_channel_name"],
 		"conditions": ["docstatus=1"],
 		"order_by": "posting_date",
 		"links": {

@@ -3,7 +3,7 @@
 
 from __future__ import unicode_literals
 import webnotes
-from webnotes.utils import flt
+from webnotes.utils import flt,cint
 from stock.utils import get_buying_amount, get_sales_bom_buying_amount
 
 def execute(filters=None):
@@ -12,8 +12,15 @@ def execute(filters=None):
 	stock_ledger_entries = get_stock_ledger_entries(filters)
 	source = get_source_data(filters)
 	item_sales_bom = get_item_sales_bom()
+
+	tot_qty = 0.0
+	tot_selling_rate = 0.0
+	tot_avg_buying_rate = 0.0
+	tot_selling_amount = 0.0
+	tot_buying_amount = 0.0
+	tot_gross_profit = 0.0
 	
-	columns = ["Delivery Note/Sales Invoice::120", "Link::30", "Posting Date:Date", "Posting Time", 
+	columns = ["Delivery Note/Sales Invoice::120", "Link::30", "Customer Name:Link/Customer:120","Posting Date:Date", "Posting Time", "Sales Channel", 
 		"Item Code:Link/Item", "Item Name", "Description", "Warehouse:Link/Warehouse",
 		"Qty:Float", "Selling Rate:Currency", "Avg. Buying Rate:Currency", 
 		"Selling Amount:Currency", "Buying Amount:Currency",
@@ -41,17 +48,34 @@ def execute(filters=None):
 
 		gross_margin = get_gross_margin(row, buying_amount)
 
+		tot_qty += row.qty
+		tot_selling_rate += row.basic_rate
+		tot_avg_buying_rate += row.qty and (buying_amount / row.qty) or 0
+		tot_selling_amount +=  selling_amount
+		tot_buying_amount += buying_amount
+		tot_gross_profit += gross_profit
+
 		icon = """<a href="%s"><i class="icon icon-share" style="cursor: pointer;"></i></a>""" \
 			% ("/".join(["#Form", row.parenttype, row.name]),)
-		data.append([row.name, icon, row.posting_date, row.posting_time, row.item_code, row.item_name,
+		data.append([row.name, icon, row.customer, row.posting_date, row.posting_time, row.sales_channel_name, row.item_code, row.item_name,
 			row.description, row.warehouse, row.qty, row.basic_rate, 
 			row.qty and (buying_amount / row.qty) or 0, row.amount, buying_amount,
 			gross_profit, gross_profit_percent, row.project])
+
+	percent=0
+	if tot_selling_amount:
+		percent=(tot_gross_profit / tot_selling_amount) * 100.0
+
+	data.append(['Total','','','','','','','','', '',tot_qty, tot_selling_rate, tot_avg_buying_rate, 
+		tot_selling_amount, tot_buying_amount, tot_gross_profit, percent, '',''])
 			
 	return columns, data
 
 def get_gross_margin(row, buying_amount):
 	gross_margin = 0.0
+	#if buying_amount / row.qty== 0:
+        #  webnotes.errprint("zero")
+	#  webnotes.errprint(buying_amount / row.qty)
 	# cost_price = webnotes.conn.sql(""" select sum(import_rate)/2 from (
 	# 			select  pri.import_rate from `tabPurchase Receipt` pr, `tabPurchase Receipt Item` pri 
 	# 			where pri.parent = pr.name 
@@ -62,7 +86,16 @@ def get_gross_margin(row, buying_amount):
 	# 		)foo """%{'item_code':row.item_code, 'warehouse':row.warehouse},as_list=1,debug=1)
 	# if flt(cost_price[0][0]) != 0:
 	# 	webnotes.errprint(row.export_rate)
-	if row.qty:
+	#if buying_amount / row.qty== 0:
+        #   webnotes.errprint("zero")
+        #   webnotes.errprint(buying_amount / row.qty)
+        #webnotes.errprint(type(row.qty))
+	#webnotes.errprint(row.qty)
+	#webnotes.errprint(buying_amount)
+        if row.qty==0.0 or buying_amount ==0:
+		webnotes.errprint("zero")
+		webnotes.errprint(row)
+	else :
 		gross_margin = ((flt(row.export_rate) - flt((buying_amount / row.qty)) ) / flt((buying_amount / row.qty)))*100
 	return gross_margin
 	
@@ -109,6 +142,8 @@ def get_source_data(filters):
 		conditions += " and posting_date<=%(to_date)s"
 	if filters.get("customer"):
 		conditions += " and customer = %(customer)s"
+	if filters.get("channel_name"):
+		conditions+= " and sales_channel_name = %(channel_name)s"
 
 	if filters.get("customer_group"):
 		conditions += """ and customer_group in (SELECT node.name
@@ -125,9 +160,10 @@ def get_source_data(filters):
 					WHERE node.lft BETWEEN parent.lft AND parent.rgt
 						AND parent.name = %(item_group)s
 					ORDER BY node.lft)"""
-	
-	delivery_note_items = webnotes.conn.sql("""select item.parenttype, dn.name, 
-		dn.posting_date, dn.posting_time, dn.project_name, 
+		
+
+	delivery_note_items = webnotes.conn.sql("""select item.parenttype, dn.name, dn.customer, 
+		dn.posting_date, dn.posting_time, dn.project_name, dn.sales_channel_name, 
 		item.item_code, item.item_name, item.description, item.warehouse,
 		item.qty, item.basic_rate, item.amount, item.name as "item_row",
 		timestamp(dn.posting_date, dn.posting_time) as posting_datetime
@@ -135,8 +171,8 @@ def get_source_data(filters):
 		where item.parent = dn.name and dn.docstatus = 1 %s
 		order by dn.posting_date desc, dn.posting_time desc""" % (conditions,), filters, as_dict=1,debug=1)
 
-	sales_invoice_items = webnotes.conn.sql("""select item.parenttype, si.name, 
-		si.posting_date, si.posting_time, si.project_name,
+	sales_invoice_items = webnotes.conn.sql("""select item.parenttype, si.name, si.customer,
+		si.posting_date, si.posting_time, si.project_name, si.sales_channel_name,
 		item.item_code, item.item_name, item.description, item.warehouse,
 		item.qty, item.basic_rate, item.amount, item.name as "item_row",
 		timestamp(si.posting_date, si.posting_time) as posting_datetime

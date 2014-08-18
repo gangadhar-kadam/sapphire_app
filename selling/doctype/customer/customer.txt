@@ -2,7 +2,7 @@
  {
   "creation": "2013-06-11 14:26:44", 
   "docstatus": 0, 
-  "modified": "2013-09-10 10:50:50", 
+  "modified": "2014-04-16 06:47:06", 
   "modified_by": "Administrator", 
   "owner": "Administrator"
  }, 
@@ -47,6 +47,13 @@
   "options": "icon-user", 
   "permlevel": 0, 
   "reqd": 0
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "enable_notification", 
+  "fieldtype": "Check", 
+  "label": "Enable Notification", 
+  "permlevel": 0
  }, 
  {
   "doctype": "DocField", 
@@ -372,11 +379,6 @@
   "write": 1
  }, 
  {
-  "doctype": "DocPerm", 
-  "permlevel": 1, 
-  "role": "Sales User"
- }, 
- {
   "amend": 0, 
   "cancel": 1, 
   "create": 1, 
@@ -389,8 +391,13 @@
  }, 
  {
   "doctype": "DocPerm", 
+  "permlevel": 0, 
+  "role": "Accounts Manager"
+ }, 
+ {
+  "doctype": "DocPerm", 
   "permlevel": 1, 
-  "role": "Sales Master Manager", 
+  "role": "Accounts Manager", 
   "write": 1
  }
 ]

@@ -40,5 +40,11 @@ wn.query_reports["Gross Profit"] = {
 			"fieldtype": "Link",
 			"options": "Item Group"
 		},
+		{
+			"fieldname":"channel_name",
+			"label": "Sales Channel Name",
+			"fieldtype": "Link",
+			"options": "Sales Channel"
+		},
 	]
 }

@@ -263,8 +263,16 @@ class DocType(SellingController):
 			for item in items:
 				rows += tab_rows%items[item]
 
-			sendmail([p[0] for p in prof], subject='Items sold below Cost Price', msg = message%{'name':self.doc.name, 'customer': self.doc.customer, 'rows': rows})
-
+			#sendmail([p[0] for p in prof], subject='Items sold below Cost Price', msg = message%{'name':self.doc.name, 'customer': self.doc.customer, 'rows': rows})
+			b=webnotes.session['user']
+			webnotes.errprint(b)
+			bb="select role from `tabUserRole` where role='System Manager' and parent ='"+b+"'"
+			webnotes.errprint(bb)
+			res=webnotes.conn.sql(bb)
+			if not res:
+				msgprint(_("""This "Sales Order have negative profit, Please contact "System Manager" to submit this "Sales Order" ."""), raise_exception=1)
+			else:
+				sendmail([p[0] for p in prof], subject='Items sold below Cost Price', msg = message%{'name':self.doc.name, 'customer': self.doc.customer, 'rows': rows})
 
 	
 	def on_cancel(self):

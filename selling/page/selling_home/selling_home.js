@@ -53,6 +53,11 @@ wn.module_page["Selling"] = [
 				description: wn._("All Products or Services."),
 				doctype:"Item"
 			},
+			{
+                                label: wn._("Sales Channel"),
+                                description: wn._("All Sales Channel"),
+                                doctype:"Sales Channel"
+                        },
 		]
 	},
 	{

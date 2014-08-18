@@ -2,12 +2,12 @@
  {
   "creation": "2013-02-26 06:31:40", 
   "docstatus": 0, 
-  "modified": "2013-12-04 06:27:24", 
+  "modified": "2014-04-10 15:29:25", 
   "modified_by": "Administrator", 
   "owner": "Administrator"
  }, 
  {
-  "add_total_row": 1, 
+  "add_total_row": 0, 
   "doctype": "Report", 
   "is_standard": "Yes", 
   "name": "__common__", 

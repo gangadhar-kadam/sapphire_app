@@ -2,7 +2,7 @@
  {
   "creation": "2013-05-24 19:29:09", 
   "docstatus": 0, 
-  "modified": "2013-10-11 13:19:40", 
+  "modified": "2014-04-30 11:05:49", 
   "modified_by": "Administrator", 
   "owner": "Administrator"
  }, 
@@ -34,9 +34,7 @@
   "parent": "Delivery Note", 
   "parentfield": "permissions", 
   "parenttype": "DocType", 
-  "permlevel": 0, 
-  "read": 1, 
-  "report": 1
+  "read": 1
  }, 
  {
   "doctype": "DocType", 
@@ -155,6 +153,14 @@
   "label": "Contact Email", 
   "print_hide": 1, 
   "read_only": 1
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "sales_channel_name", 
+  "fieldtype": "Link", 
+  "label": "Sales Channel Name", 
+  "options": "Sales Channel", 
+  "read_only": 0
  }, 
  {
   "doctype": "DocField", 
@@ -1026,43 +1032,143 @@
   "read_only": 0
  }, 
  {
+  "amend": 0, 
+  "cancel": 0, 
+  "create": 1, 
+  "doctype": "DocPerm", 
+  "permlevel": 0, 
+  "report": 1, 
+  "role": "Accounts Manager", 
+  "submit": 1, 
+  "write": 1
+ }, 
+ {
   "amend": 1, 
   "cancel": 1, 
   "create": 1, 
   "doctype": "DocPerm", 
+  "permlevel": 0, 
+  "report": 1, 
   "role": "Material User", 
   "submit": 1, 
   "write": 1
  }, 
  {
+  "amend": 0, 
+  "cancel": 0, 
+  "create": 0, 
+  "doctype": "DocPerm", 
+  "permlevel": 1, 
+  "report": 0, 
+  "role": "Material User", 
+  "submit": 0, 
+  "write": 0
+ }, 
+ {
   "amend": 1, 
   "cancel": 1, 
   "create": 1, 
   "doctype": "DocPerm", 
+  "permlevel": 0, 
+  "report": 1, 
   "role": "Material Manager", 
   "submit": 1, 
   "write": 1
  }, 
  {
+  "amend": 0, 
+  "cancel": 0, 
+  "create": 0, 
+  "doctype": "DocPerm", 
+  "permlevel": 1, 
+  "report": 0, 
+  "role": "Material Manager", 
+  "submit": 0, 
+  "write": 0
+ }, 
+ {
   "amend": 1, 
   "cancel": 1, 
   "create": 1, 
   "doctype": "DocPerm", 
+  "permlevel": 0, 
+  "report": 1, 
   "role": "Sales User", 
-  "submit": 1, 
+  "submit": 0, 
   "write": 1
  }, 
  {
+  "amend": 0, 
   "cancel": 0, 
   "create": 0, 
   "doctype": "DocPerm", 
+  "permlevel": 1, 
+  "report": 0, 
+  "role": "Sales User", 
+  "submit": 0, 
+  "write": 0
+ }, 
+ {
+  "amend": 0, 
+  "cancel": 0, 
+  "create": 0, 
+  "doctype": "DocPerm", 
+  "permlevel": 0, 
+  "report": 1, 
   "role": "Accounts User", 
   "submit": 0, 
   "write": 0
  }, 
  {
+  "amend": 0, 
+  "cancel": 0, 
+  "create": 0, 
   "doctype": "DocPerm", 
-  "match": "customer_name", 
-  "role": "Customer"
+  "permlevel": 1, 
+  "report": 0, 
+  "role": "Accounts User", 
+  "submit": 0, 
+  "write": 0
+ }, 
+ {
+  "create": 1, 
+  "doctype": "DocPerm", 
+  "match": "owner", 
+  "permlevel": 0, 
+  "report": 0, 
+  "role": "Customer", 
+  "write": 1
+ }, 
+ {
+  "doctype": "DocPerm", 
+  "match": "to_warehouse", 
+  "permlevel": 0, 
+  "report": 1, 
+  "role": "Supplier Role"
+ }, 
+ {
+  "doctype": "DocPerm", 
+  "match": "customer", 
+  "permlevel": 0, 
+  "report": 1, 
+  "role": "Slot Manager"
+ }, 
+ {
+  "doctype": "DocPerm", 
+  "permlevel": 1, 
+  "role": "Accounts Manager", 
+  "write": 1
+ }, 
+ {
+  "amend": 1, 
+  "cancel": 1, 
+  "create": 1, 
+  "doctype": "DocPerm", 
+  "match": "owner", 
+  "permlevel": 0, 
+  "report": 1, 
+  "role": "Material Master Manager", 
+  "submit": 0, 
+  "write": 1
  }
 ]
