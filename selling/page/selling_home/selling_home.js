@@ -32,6 +32,12 @@ wn.module_page["Selling"] = [
 				description: wn._("Confirmed orders from Customers."),
 				doctype:"Sales Order"
 			},
+			{
+				label: wn._("Sales Channel Budget Distribution"),
+				description: wn._("Sales Channel Budget Distribution."),
+				doctype:"Sales Channel Budget Distribution"
+			},
+
 		]
 	},
 	{

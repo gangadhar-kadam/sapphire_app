@@ -186,3 +186,9 @@ def get_source_data(filters):
 		source.sort(key=lambda d: d.posting_datetime, reverse=True)
 	
 	return source
+
+
+@webnotes.whitelist()
+def get_gross_pay(filters):
+	data=execute(filters)
+	return data

@@ -1,0 +1,59 @@
+[
+ {
+  "creation": "2014-11-10 06:56:48", 
+  "docstatus": 0, 
+  "modified": "2014-11-10 06:56:48", 
+  "modified_by": "Administrator", 
+  "owner": "Administrator"
+ }, 
+ {
+  "autoname": "field:sales_channel", 
+  "doctype": "DocType", 
+  "document_type": "Master", 
+  "module": "Selling", 
+  "name": "__common__"
+ }, 
+ {
+  "doctype": "DocField", 
+  "name": "__common__", 
+  "parent": "Sales Channel Budget Distribution", 
+  "parentfield": "fields", 
+  "parenttype": "DocType", 
+  "permlevel": 0, 
+  "reqd": 1
+ }, 
+ {
+  "create": 1, 
+  "doctype": "DocPerm", 
+  "name": "__common__", 
+  "parent": "Sales Channel Budget Distribution", 
+  "parentfield": "permissions", 
+  "parenttype": "DocType", 
+  "permlevel": 0, 
+  "read": 1, 
+  "report": 1, 
+  "role": "System Manager", 
+  "write": 1
+ }, 
+ {
+  "doctype": "DocType", 
+  "name": "Sales Channel Budget Distribution"
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "sales_channel", 
+  "fieldtype": "Link", 
+  "label": "Sales Channel", 
+  "options": "Sales Channel"
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "sales_channel_budget_distribution", 
+  "fieldtype": "Table", 
+  "label": "Sales Channel Budget Distribution", 
+  "options": "Channel Budget Distribution"
+ }, 
+ {
+  "doctype": "DocPerm"
+ }
+]

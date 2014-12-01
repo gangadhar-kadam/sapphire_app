@@ -1,0 +1,21 @@
+[
+ {
+  "creation": "2014-11-10 17:48:05", 
+  "docstatus": 0, 
+  "modified": "2014-11-10 17:48:05", 
+  "modified_by": "Administrator", 
+  "owner": "Administrator"
+ }, 
+ {
+  "doctype": "Report", 
+  "is_standard": "Yes", 
+  "name": "__common__", 
+  "ref_doctype": "Sales Order", 
+  "report_name": "Net Profit", 
+  "report_type": "Script Report"
+ }, 
+ {
+  "doctype": "Report", 
+  "name": "Net Profit"
+ }
+]

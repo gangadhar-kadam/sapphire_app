@@ -131,3 +131,15 @@ def get_outstanding_amount(gle, report_date):
 		
 	outstanding_amount = flt(gle.credit) - flt(gle.debit) - flt(payment_amount)
 	return outstanding_amount
+
+
+
+@webnotes.whitelist()
+def get_acc_pay():
+	filters={
+	   'company':'Sapphire Virtual Networks LTD',
+	   'report_date':nowdate()
+	}
+	data=execute(filters)
+	return data
+

@@ -1,0 +1,48 @@
+[
+ {
+  "creation": "2014-11-10 06:51:17", 
+  "docstatus": 0, 
+  "modified": "2014-11-10 07:02:18", 
+  "modified_by": "Administrator", 
+  "owner": "Administrator"
+ }, 
+ {
+  "doctype": "DocType", 
+  "module": "Selling", 
+  "name": "__common__"
+ }, 
+ {
+  "doctype": "DocField", 
+  "in_list_view": 1, 
+  "name": "__common__", 
+  "parent": "Channel Budget Distribution", 
+  "parentfield": "fields", 
+  "parenttype": "DocType", 
+  "permlevel": 0, 
+  "reqd": 1
+ }, 
+ {
+  "doctype": "DocType", 
+  "name": "Channel Budget Distribution"
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "fiscal_year", 
+  "fieldtype": "Link", 
+  "label": "Fiscal Year", 
+  "options": "Fiscal Year"
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "budget_distribution", 
+  "fieldtype": "Link", 
+  "label": "Budget Distribution", 
+  "options": "Budget Distribution"
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "amount", 
+  "fieldtype": "Currency", 
+  "label": "Amount"
+ }
+]

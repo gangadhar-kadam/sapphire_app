@@ -1,0 +1,68 @@
+[
+ {
+  "creation": "2014-11-10 07:00:27", 
+  "docstatus": 0, 
+  "modified": "2014-11-14 12:58:28", 
+  "modified_by": "Administrator", 
+  "owner": "Administrator"
+ }, 
+ {
+  "doctype": "Page", 
+  "module": "Selling", 
+  "name": "__common__", 
+  "page_name": "dashboards", 
+  "standard": "Yes", 
+  "title": "Dashboard"
+ }, 
+ {
+  "doctype": "Page Role", 
+  "name": "__common__", 
+  "parent": "dashboards", 
+  "parentfield": "roles", 
+  "parenttype": "Page"
+ }, 
+ {
+  "doctype": "Page", 
+  "name": "dashboards"
+ }, 
+ {
+  "doctype": "Page Role", 
+  "role": "Accounts User"
+ }, 
+ {
+  "doctype": "Page Role", 
+  "role": "Accounts Manager"
+ }, 
+ {
+  "doctype": "Page Role", 
+  "role": "Administrator"
+ }, 
+ {
+  "doctype": "Page Role", 
+  "role": "Sales Master Manager"
+ }, 
+ {
+  "doctype": "Page Role", 
+  "role": "Sales User"
+ }, 
+ {
+  "doctype": "Page Role", 
+  "role": "Sales Manager"
+ }, 
+ {
+  "doctype": "Page Role", 
+  "role": "Material Master Manager"
+ }, 
+ {
+  "doctype": "Page Role", 
+  "role": "Material User"
+ }, 
+ {
+  "doctype": "Page Role", 
+  "role": "Material Manager"
+ }, 
+ {
+  "doctype": "Page Role", 
+  "role": "System Manager"
+ }
+]
