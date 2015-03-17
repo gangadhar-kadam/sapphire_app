@@ -2,7 +2,7 @@
  {
   "creation": "2013-06-18 12:39:59", 
   "docstatus": 0, 
-  "modified": "2014-04-30 11:05:33", 
+  "modified": "2015-03-03 07:32:02", 
   "modified_by": "Administrator", 
   "owner": "Administrator"
  }, 
@@ -256,6 +256,65 @@
   "in_filter": 0, 
   "label": "Shipping Address", 
   "print_hide": 1, 
+  "read_only": 1
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "customer_credit_and_outstanding", 
+  "fieldtype": "Section Break", 
+  "label": "Customer Credit And Outstanding"
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "credit_limit", 
+  "fieldtype": "Float", 
+  "label": "Credit Limit", 
+  "read_only": 1
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "period", 
+  "fieldtype": "Data", 
+  "label": "Credit Period", 
+  "read_only": 1
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "column_break_24", 
+  "fieldtype": "Column Break"
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "total_outstanding_payment", 
+  "fieldtype": "Float", 
+  "label": "Total Outstanding Payment", 
+  "read_only": 1
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "delivery_state", 
+  "fieldtype": "Select", 
+  "label": "Delivery State", 
+  "options": "\nAbia State\nAdamawa State\nAkwa Ibom State\nAnambra State\nBauchi State\nBayelsa State\nBenue State\nBorno State\nCross River State\nDelta State\nEbonyi State\nEdo State\nEkiti State\nEnugu State\nAbuja State\nGombe State\nImo State\nJigawa State\nKaduna State\nKano State\nKatsina State\nKebbi State\nKogi State\nKwara State\nLagos State\nNasarawa State\nNiger State\nOgun State\nOndo State\nOsun State\nOyo State\nPlateau State\nRivers State\nSokoto State\nTaraba State\nYobe State\nZamfara State"
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "section_break_26", 
+  "fieldtype": "Section Break"
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "transaction_details", 
+  "fieldtype": "Table", 
+  "label": "Transaction Details", 
+  "options": "Transaction Details", 
+  "read_only": 0
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "exceeded_amount", 
+  "fieldtype": "Float", 
+  "label": "Total Outstanding Payment Exceeds Credit  Days", 
   "read_only": 1
  }, 
  {

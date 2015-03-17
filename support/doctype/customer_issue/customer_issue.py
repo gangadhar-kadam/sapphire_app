@@ -5,7 +5,7 @@
 from __future__ import unicode_literals
 import webnotes
 from webnotes import session, msgprint
-from webnotes.utils import today
+from webnotes.utils import today,add_days,cint,nowdate,formatdate
 
 sql = webnotes.conn.sql
 	
@@ -61,3 +61,24 @@ def make_maintenance_visit(source_name, target_doclist=None):
 		}, target_doclist)
 	
 		return [d.fields for d in doclist]
+
+
+
+@webnotes.whitelist()
+def get_warranty_code_details(warranty_code):
+		customer_details=webnotes.conn.sql("""select item_code,name,coalesce(customer,'') as  customer from `tabSerial No` where warranty_code='%s'"""%(warranty_code),as_dict=1,debug=1)
+		if customer_details:
+			webnotes.errprint(customer_details[0]['item_code'])
+			warranty_period=webnotes.conn.sql("""select end_customer_warranty_period from `tabItem` where name='%s'"""%(customer_details[0]['item_code']),as_dict=1,debug=1)
+			webnotes.errprint(warranty_period[0]['end_customer_warranty_period'])
+			if warranty_period:
+				final_date=add_days(nowdate(),cint(warranty_period[0]['end_customer_warranty_period']))
+			else:
+				final_date=nowdate()
+			webnotes.errprint(final_date)
+			return [{
+				"item_code": customer_details[0]['item_code'],
+				"serial_no":customer_details[0]['name'],
+				"end_date":final_date,
+				"customer":customer_details[0]['customer']
+			}]	

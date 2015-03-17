@@ -18,7 +18,8 @@ erpnext.selling.SalesOrderController = erpnext.selling.SellingController.extend(
 	refresh: function(doc, dt, dn) {
 		this._super();
 		this.frm.dashboard.reset();
-		
+	//	console.log("in the refresh");
+	//	this.onload(doc, dt, dn);
 		if(doc.docstatus==1) {
 			if(doc.status != 'Stopped') {
 				
@@ -127,6 +128,25 @@ erpnext.selling.SalesOrderController = erpnext.selling.SellingController.extend(
 			source_name: cur_frm.doc.name
 		})
 	}, 
+	onload: function(doc,dt,dn) {
+		console.log("in the onload");
+		return get_server_fields('get_invoice_info', doc.customer, '', doc, dt, dn, 1,function(r){
+			doc.period=r.period
+			doc.credit_limit=r.credit_limit
+			doc.total_outstanding_payment=r.total_outstanding_payment
+			doc.exceeded_amount=r.exceeded_amount
+			refresh_field('period');
+			refresh_field('total_outstanding_payment');
+			refresh_field('transaction_details');
+			refresh_field('exceeded_amount');
+
+                      })
+        /*                refresh_field('period');
+                        refresh_field('total_outstanding_payment');
+                        refresh_field('transaction_details');
+                        refresh_field('exceeded_amount');
+*/
+        },	
 	
 	make_maintenance_visit: function() {
 		wn.model.open_mapped_doc({
@@ -154,6 +174,29 @@ cur_frm.fields_dict['project_name'].get_query = function(doc, cdt, cdn) {
 		}
 	}
 }
+
+
+cur_frm.cscript.customer=function(doc, cdt, cdn){
+	return get_server_fields('get_invoice_info', doc.customer, '', doc, cdt, cdn, 1,function(r){
+		doc.period=r.period
+		doc.credit_limit=r.credit_limit
+		doc.total_outstanding_payment=r.total_outstanding_payment
+		doc.exceeded_amount=r.exceeded_amount
+		refresh_field('exceeded_amount');
+        	refresh_field('credit_limit');
+		refresh_field('period');
+		refresh_field('total_outstanding_payment');
+		refresh_field('transaction_details');
+	})
+}
+
+
+
+
+
+
+
+
 
 cur_frm.cscript['Stop Sales Order'] = function() {
 	var doc = cur_frm.doc;

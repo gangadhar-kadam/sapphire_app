@@ -64,6 +64,11 @@ wn.module_page["Selling"] = [
                                 description: wn._("All Sales Channel"),
                                 doctype:"Sales Channel"
                         },
+			{
+				label: wn._("Logistics Costs"),
+				description: wn._("Confirmed orders from Customers."),
+				doctype:"Logistics Costs"
+			},
 		]
 	},
 	{

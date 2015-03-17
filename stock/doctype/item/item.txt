@@ -2,7 +2,7 @@
  {
   "creation": "2013-05-03 10:45:46", 
   "docstatus": 0, 
-  "modified": "2013-09-11 11:50:10", 
+  "modified": "2015-01-28 07:51:09", 
   "modified_by": "Administrator", 
   "owner": "Administrator"
  }, 
@@ -34,10 +34,7 @@
   "parent": "Item", 
   "parentfield": "permissions", 
   "parenttype": "DocType", 
-  "permlevel": 0, 
-  "read": 1, 
-  "report": 1, 
-  "submit": 0
+  "read": 1
  }, 
  {
   "doctype": "DocType", 
@@ -252,6 +249,15 @@
   "read_only": 0
  }, 
  {
+  "description": "No", 
+  "doctype": "DocField", 
+  "fieldname": "has_warranty_code", 
+  "fieldtype": "Select", 
+  "label": "Has Warranty Code", 
+  "options": "Yes\nNo", 
+  "reqd": 1
+ }, 
+ {
   "depends_on": "eval:doc.is_stock_item==\"Yes\"", 
   "doctype": "DocField", 
   "fieldname": "column_break1", 
@@ -301,6 +307,12 @@
   "options": "Yes\nNo", 
   "read_only": 0, 
   "reqd": 1
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "end_customer_warranty_period", 
+  "fieldtype": "Data", 
+  "label": "End Customer Warranty Period(in days) "
  }, 
  {
   "depends_on": "eval: doc.has_serial_no===\"Yes\"", 
@@ -844,10 +856,57 @@
   "read_only": 0
  }, 
  {
+  "amend": 0, 
+  "cancel": 0, 
+  "create": 0, 
+  "doctype": "DocPerm", 
+  "permlevel": 1, 
+  "report": 0, 
+  "role": "Material Manager", 
+  "submit": 0, 
+  "write": 0
+ }, 
+ {
+  "amend": 0, 
+  "cancel": 0, 
+  "create": 0, 
+  "doctype": "DocPerm", 
+  "permlevel": 0, 
+  "report": 1, 
+  "role": "Material Manager", 
+  "submit": 0, 
+  "write": 0
+ }, 
+ {
+  "amend": 0, 
+  "cancel": 0, 
+  "create": 0, 
+  "doctype": "DocPerm", 
+  "permlevel": 1, 
+  "report": 0, 
+  "role": "Material User", 
+  "submit": 0, 
+  "write": 0
+ }, 
+ {
+  "amend": 0, 
+  "cancel": 0, 
+  "create": 0, 
+  "doctype": "DocPerm", 
+  "permlevel": 0, 
+  "report": 1, 
+  "role": "Material User", 
+  "submit": 0, 
+  "write": 0
+ }, 
+ {
   "cancel": 1, 
   "create": 1, 
   "doctype": "DocPerm", 
+  "permlevel": 0, 
+  "report": 1, 
   "role": "Material Master Manager", 
+  "submit": 0, 
   "write": 1
  }, 
  {
@@ -855,15 +914,35 @@
   "cancel": 0, 
   "create": 0, 
   "doctype": "DocPerm", 
-  "role": "Material Manager", 
+  "permlevel": 1, 
+  "report": 0, 
+  "role": "Material Master Manager", 
+  "submit": 0, 
   "write": 0
+ }, 
+ {
+  "cancel": 1, 
+  "create": 1, 
+  "doctype": "DocPerm", 
+  "permlevel": 0, 
+  "report": 1, 
+  "role": "System Manager", 
+  "submit": 0, 
+  "write": 1
  }, 
  {
   "amend": 0, 
   "cancel": 0, 
   "create": 0, 
   "doctype": "DocPerm", 
-  "role": "Material User", 
-  "write": 0
+  "permlevel": 1, 
+  "role": "System Manager", 
+  "submit": 0
+ }, 
+ {
+  "doctype": "DocPerm", 
+  "permlevel": 0, 
+  "report": 1, 
+  "role": "Supplier"
  }
 ]

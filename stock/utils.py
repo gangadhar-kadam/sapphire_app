@@ -239,9 +239,24 @@ def get_buying_amount(voucher_type, voucher_no, item_row, stock_ledger_entries):
 	# IMP NOTE
 	# stock_ledger_entries should already be filtered by item_code and warehouse and 
 	# sorted by posting_date desc, posting_time desc
+	#webnotes.errprint(stock_ledger_entries)
+        #webnotes.errprint(sle.voucher_type)
+        #webnotes.errprint(voucher_type)
+        #webnotes.errprint(sle.voucher_no)
+        #webnotes.errprint(voucher_no)
+        #webnotes.errprint(sle.voucher_detail_no)
+        #webnotes.errprint(item_row)
+
 	for i, sle in enumerate(stock_ledger_entries):
+		#webnotes.errprint(sle.voucher_type)
+		#webnotes.errprint(voucher_type)
+		#webnotes.errprint(sle.voucher_no)
+		#webnotes.errprint(voucher_no)
+		#webnotes.errprint(sle.voucher_detail_no)
+		#webnotes.errprint(item_row)
 		if sle.voucher_type == voucher_type and sle.voucher_no == voucher_no and \
 			sle.voucher_detail_no == item_row:
+				#webnotes.errprint("in if")
 				previous_stock_value = len(stock_ledger_entries) > i+1 and \
 					flt(stock_ledger_entries[i+1].stock_value) or 0.0
 				buying_amount =  previous_stock_value - flt(sle.stock_value)						

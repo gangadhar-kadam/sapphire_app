@@ -10,6 +10,7 @@ from webnotes.model.bean import getlist
 from webnotes.model.code import get_obj
 from webnotes import msgprint
 from webnotes.model.mapper import get_mapped_doclist
+from webnotes.model.doc import addchild
 
 sql = webnotes.conn.sql
 	
@@ -196,6 +197,8 @@ class DocType(SellingController):
 						self.update_enquiry_status(d.prevdoc_docname, 'Quotation Sent')
 
 	def on_submit(self):
+		# saurabh for sending email for negative alert
+		self.check_cost_price()
 		self.check_prev_docstatus()		
 		self.update_stock_ledger(update_stock = 1)
 
@@ -205,8 +208,6 @@ class DocType(SellingController):
 		
 		self.update_prevdoc_status('submit')
 		webnotes.conn.set(self.doc, 'status', 'Submitted')
-                # --gangadhar for email alert if item sold below cost price.
-		self.check_cost_price()
 
 	def check_cost_price(self):
 		item_dict = {}
@@ -232,6 +233,7 @@ class DocType(SellingController):
 
 	def send_mail(self, items):
 		from webnotes.utils.email_lib import sendmail
+		webnotes.errprint(items)
 		if(len(items)>0):
 			rows = ''
 
@@ -269,9 +271,13 @@ class DocType(SellingController):
 			bb="select role from `tabUserRole` where role='System Manager' and parent ='"+b+"'"
 			webnotes.errprint(bb)
 			res=webnotes.conn.sql(bb)
+			webnotes.errprint(res)
 			if not res:
-				msgprint(_("""This "Sales Order have negative profit, Please contact "System Manager" to submit this "Sales Order" ."""), raise_exception=1)
+				msgprint("""This "Sales Order have negative profit, Please contact "System Manager" to submit this "Sales Order" .""")
+				raise Exception
 			else:
+				webnotes.errprint("sending emails to ")
+				webnotes.errprint(prof)
 				sendmail([p[0] for p in prof], subject='Items sold below Cost Price', msg = message%{'name':self.doc.name, 'customer': self.doc.customer, 'rows': rows})
 
 	
@@ -360,6 +366,44 @@ class DocType(SellingController):
 		
 	def get_portal_page(self):
 		return "order" if self.doc.docstatus==1 else None
+
+
+#last three invoice child table
+
+	def get_invoice_info(self,customer):
+		credit_limit=''
+		credit_days=''
+		tot_payment=''
+		credit_info=webnotes.conn.sql("""select credit_days,credit_limit from `tabCustomer` where name='%s'"""%(customer),as_dict=1,debug=1)
+		if credit_info:
+			credit_days=credit_info[0]['credit_days']
+			credit_limit=credit_info[0]['credit_limit']
+		outstanding_amount=webnotes.conn.sql("""select sum(outstanding_amount) as outstanding from `tabSales Invoice` where customer='%s' """%(customer),as_dict=1,debug=1)
+		if outstanding_amount:
+			tot_payment=outstanding_amount[0]['outstanding']
+		last_invoice=webnotes.conn.sql("""select creation, name,grand_total,mode_of_payment,outstanding_amount from `tabSales Invoice` where customer='%s' order by creation desc limit 10 """%(customer),as_dict=1)
+		#webnotes.errprint(last_invoice)
+		for inv in last_invoice:
+			nl = addchild(self.doc, 'transaction_details', 'Transaction Details', self.doclist)
+			nl.date = getdate(inv['creation'])
+			nl.invoice_number = inv['name']
+			nl.invoice_value = inv['grand_total']
+			ageing=webnotes.conn.sql("""select DATEDIFF(now(),'%s') AS age"""%(inv['creation']),as_dict=1,debug=1)
+			if ageing:
+				nl.payment_mode=ageing[0]['age']
+			nl.outstanding_amount =inv['outstanding_amount']
+			nl.save(1)
+		outstanding_exceeded_info=webnotes.conn.sql("""select  sum(coalesce((select coalesce(outstanding_amount,0) from `tabSales Invoice` where name in (select parent from `tabSales Invoice Item` where sales_order=so.name) and DATE_ADD(creation,INTERVAL coalesce(so.period,0) day)>now() ),0)) as outstanding_amount  from `tabSales Order` so  where so.customer_name='%s'"""%(customer),as_dict=1,debug=1)	
+		if outstanding_exceeded_info:
+			outstanding_exceeded=outstanding_exceeded_info[0]['outstanding_amount']
+
+
+ 		return {
+		"period":credit_days,
+		"credit_limit":credit_limit,
+		"total_outstanding_payment":tot_payment,
+		"exceeded_amount":outstanding_exceeded
+		}
 		
 def set_missing_values(source, target):
 	bean = webnotes.bean(target)
@@ -401,7 +445,8 @@ def make_delivery_note(source_name, target_doclist=None):
 			"doctype": "Delivery Note", 
 			"field_map": {
 				"shipping_address": "address_display", 
-				"shipping_address_name": "customer_address", 
+				"shipping_address_name": "customer_address",
+				"delivery_state":"delivery_state" 
 			},
 			"validation": {
 				"docstatus": ["=", 1]

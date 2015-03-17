@@ -47,6 +47,44 @@ cur_frm.cscript.customer_address = cur_frm.cscript.contact_person = function(doc
 			JSON.stringify({customer: doc.customer, address: doc.customer_address, contact: doc.contact_person}),'', doc, dt, dn, 1);
 }
 
+cur_frm.cscript.warranty_code = function(doc,dt,dn) {
+	console.log("in the warranty_code");
+	if(doc.warranty_code) {
+		wn.call({
+			method: "support.doctype.customer_issue.customer_issue.get_warranty_code_details",
+			args: {warranty_code: doc.warranty_code},
+			callback: function(r) {
+				console.log(r.message[0]['serial_no'])
+				console.log(r.message[0]['end_date'])
+				doc.item_code =r.message[0]['item_code'];
+				doc.serial_no=r.message[0]['serial_no'];
+				doc.end_customer_warranty_end_date=r.message[0]['end_date'];
+				doc.customer=r.message[0]['customer']
+				refresh_field('customer');
+				refresh_field('item_code');
+				refresh_field('serial_no');
+				refresh_field('end_customer_warranty_end_date');
+
+			}
+		});
+	}
+} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 cur_frm.fields_dict['customer_address'].get_query = function(doc, cdt, cdn) {
 	return{
 		filters:{ 'customer': doc.customer}

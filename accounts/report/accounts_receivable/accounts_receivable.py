@@ -139,6 +139,9 @@ class AccountsReceivableReport(object):
 			.get(against_voucher, [])
 
 def execute(filters=None):
+	filters={
+	"report_date":nowdate()
+	}
 	return AccountsReceivableReport(filters).run()
 	
 def get_ageing_data(age_as_on, entry_date, outstanding_amount):

@@ -2,7 +2,7 @@
  {
   "creation": "2013-01-10 16:34:30", 
   "docstatus": 0, 
-  "modified": "2013-08-08 14:22:33", 
+  "modified": "2015-01-28 07:53:05", 
   "modified_by": "Administrator", 
   "owner": "harshada@webnotestech.com"
  }, 
@@ -10,7 +10,7 @@
   "autoname": "naming_series:", 
   "doctype": "DocType", 
   "icon": "icon-bug", 
-  "is_submittable": 0, 
+  "is_submittable": 1, 
   "module": "Support", 
   "name": "__common__", 
   "search_fields": "status,customer,customer_name,allocated_to,allocated_on, territory"
@@ -24,20 +24,12 @@
   "permlevel": 0
  }, 
  {
-  "amend": 0, 
-  "cancel": 1, 
-  "create": 1, 
   "doctype": "DocPerm", 
   "name": "__common__", 
   "parent": "Customer Issue", 
   "parentfield": "permissions", 
   "parenttype": "DocType", 
-  "permlevel": 0, 
-  "read": 1, 
-  "report": 1, 
-  "role": "Maintenance User", 
-  "submit": 0, 
-  "write": 1
+  "read": 1
  }, 
  {
   "doctype": "DocType", 
@@ -126,6 +118,48 @@
   "label": "Contact Person", 
   "options": "Contact", 
   "print_hide": 1
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "end_customer_details", 
+  "fieldtype": "Section Break", 
+  "label": "End Customer Details"
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "warranty_code", 
+  "fieldtype": "Data", 
+  "label": "Warranty Code"
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "consumer_name", 
+  "fieldtype": "Data", 
+  "label": "Consumer Name"
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "column_break_12", 
+  "fieldtype": "Column Break"
+ }, 
+ {
+  "default": "Today", 
+  "doctype": "DocField", 
+  "fieldname": "end_customer_warranty_start_date", 
+  "fieldtype": "Date", 
+  "label": " End Customer Warranty Start Date"
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "end_customer_warranty_end_date", 
+  "fieldtype": "Date", 
+  "label": "End Customer Warranty End Date"
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "customer_purchase_date", 
+  "fieldtype": "Date", 
+  "label": "Customer Purchase Date"
  }, 
  {
   "doctype": "DocField", 
@@ -416,6 +450,71 @@
   "width": "150px"
  }, 
  {
-  "doctype": "DocPerm"
+  "amend": 1, 
+  "cancel": 1, 
+  "create": 1, 
+  "doctype": "DocPerm", 
+  "permlevel": 0, 
+  "report": 1, 
+  "role": "System Manager", 
+  "submit": 1, 
+  "write": 1
+ }, 
+ {
+  "create": 1, 
+  "doctype": "DocPerm", 
+  "permlevel": 0, 
+  "report": 1, 
+  "role": "Guest", 
+  "write": 1
+ }, 
+ {
+  "amend": 0, 
+  "cancel": 0, 
+  "create": 0, 
+  "doctype": "DocPerm", 
+  "permlevel": 1, 
+  "role": "System Manager", 
+  "submit": 0
+ }, 
+ {
+  "amend": 1, 
+  "cancel": 1, 
+  "create": 1, 
+  "doctype": "DocPerm", 
+  "permlevel": 0, 
+  "report": 1, 
+  "role": "Maintenance Manager", 
+  "submit": 1, 
+  "write": 1
+ }, 
+ {
+  "amend": 0, 
+  "cancel": 0, 
+  "create": 0, 
+  "doctype": "DocPerm", 
+  "permlevel": 1, 
+  "role": "Maintenance Manager", 
+  "submit": 0
+ }, 
+ {
+  "amend": 1, 
+  "cancel": 1, 
+  "create": 1, 
+  "doctype": "DocPerm", 
+  "permlevel": 0, 
+  "report": 1, 
+  "role": "Maintenance User", 
+  "submit": 1, 
+  "write": 1
+ }, 
+ {
+  "amend": 0, 
+  "cancel": 0, 
+  "create": 0, 
+  "doctype": "DocPerm", 
+  "permlevel": 1, 
+  "role": "Maintenance User", 
+  "submit": 0
  }
 ]

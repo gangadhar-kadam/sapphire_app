@@ -71,7 +71,7 @@ class DocType(BuyingController):
 		self.update_raw_materials_supplied("pr_raw_material_details")
 		
 		self.update_valuation_rate("purchase_receipt_details")
-
+		##self.generate_warranty_code()
 	def validate_rejected_warehouse(self):
 		for d in self.doclist.get({"parentfield": "purchase_receipt_details"}):
 			if flt(d.rejected_qty) and not d.rejected_warehouse:
@@ -252,6 +252,23 @@ class DocType(BuyingController):
 		purchase_controller.update_last_purchase_rate(self, 1)
 		
 		self.make_gl_entries()
+		self.generate_warranty_code()
+
+
+
+	def generate_warranty_code(self):
+		import string
+		import random
+		for item in self.doclist.get({"parentfield": "purchase_receipt_details"}):
+			has_warranty_code=webnotes.conn.sql("""select has_warranty_code from tabItem where name='%s'"""%(item.item_code),as_dict=1,debug=1)
+			if has_warranty_code:
+				if has_warranty_code[0]['has_warranty_code']=='Yes':
+					if item.serial_no:
+						serial_no=(item.serial_no).splitlines()
+						for srno in serial_no:
+							code=''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(5))
+							webnotes.conn.sql("""update `tabSerial No` set warranty_code='%s' where name='%s'"""%(code,srno))	
+
 
 	def check_next_docstatus(self):
 		submit_rv = webnotes.conn.sql("select t1.name from `tabPurchase Invoice` t1,`tabPurchase Invoice Item` t2 where t1.name = t2.parent and t2.purchase_receipt = '%s' and t1.docstatus = 1" % (self.doc.name))
