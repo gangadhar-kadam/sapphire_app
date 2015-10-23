@@ -1,0 +1,62 @@
+[
+ {
+  "creation": "2015-02-24 11:49:27", 
+  "docstatus": 0, 
+  "modified": "2015-03-09 11:34:01", 
+  "modified_by": "Administrator", 
+  "owner": "Administrator"
+ }, 
+ {
+  "doctype": "DocType", 
+  "istable": 1, 
+  "module": "Selling", 
+  "name": "__common__"
+ }, 
+ {
+  "doctype": "DocField", 
+  "name": "__common__", 
+  "parent": "Transaction Details", 
+  "parentfield": "fields", 
+  "parenttype": "DocType", 
+  "permlevel": 0
+ }, 
+ {
+  "doctype": "DocType", 
+  "name": "Transaction Details"
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "date", 
+  "fieldtype": "Date", 
+  "in_list_view": 1, 
+  "label": "Date"
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "invoice_number", 
+  "fieldtype": "Data", 
+  "in_list_view": 1, 
+  "label": "Invoice Number"
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "invoice_value", 
+  "fieldtype": "Float", 
+  "in_list_view": 0, 
+  "label": "Invoice Value"
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "payment_mode", 
+  "fieldtype": "Data", 
+  "in_list_view": 1, 
+  "label": "Ageing"
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "outstanding_amount", 
+  "fieldtype": "Float", 
+  "in_list_view": 1, 
+  "label": "Outstanding Amount"
+ }
+]

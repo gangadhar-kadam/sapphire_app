@@ -63,12 +63,13 @@ def execute(filters=None):
 			row.qty and (buying_amount / row.qty) or 0, row.amount, buying_amount,flt(logistic_cost),
 			gross_profit, gross_profit_percent, row.project])
 
-	percent=0
+	percent=0.0
 	if tot_selling_amount:
 		percent=(tot_gross_profit / tot_selling_amount) * 100.0
+	
 
 	data.append(['Total','','','','','','','','', '',tot_qty, tot_selling_rate, tot_avg_buying_rate, 
-		tot_selling_amount, tot_buying_amount, tot_gross_profit, percent, '',''])
+		tot_selling_amount, tot_buying_amount,'', tot_gross_profit, percent, '',''])
 	return columns, data
 
 #code for logistic cost

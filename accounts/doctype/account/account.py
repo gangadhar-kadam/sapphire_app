@@ -177,7 +177,7 @@ class DocType:
 		if not credit_limit:
 			credit_limit = webnotes.conn.get_value('Company', self.doc.company, 'credit_limit')
 			credit_limit_from = 'Company'
-		
+	
 		# If outstanding greater than credit limit and not authorized person raise exception
 		if credit_limit > 0 and flt(total_outstanding) > credit_limit \
 				and not self.get_authorized_user():

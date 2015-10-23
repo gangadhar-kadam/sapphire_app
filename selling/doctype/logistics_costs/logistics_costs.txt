@@ -1,0 +1,70 @@
+[
+ {
+  "creation": "2015-02-24 13:04:49", 
+  "docstatus": 0, 
+  "modified": "2015-03-11 10:12:58", 
+  "modified_by": "Administrator", 
+  "owner": "Administrator"
+ }, 
+ {
+  "autoname": "LC.#########", 
+  "doctype": "DocType", 
+  "document_type": "Master", 
+  "module": "Selling", 
+  "name": "__common__"
+ }, 
+ {
+  "doctype": "DocField", 
+  "name": "__common__", 
+  "parent": "Logistics Costs", 
+  "parentfield": "fields", 
+  "parenttype": "DocType", 
+  "permlevel": 0
+ }, 
+ {
+  "cancel": 1, 
+  "create": 1, 
+  "doctype": "DocPerm", 
+  "name": "__common__", 
+  "parent": "Logistics Costs", 
+  "parentfield": "permissions", 
+  "parenttype": "DocType", 
+  "permlevel": 0, 
+  "read": 1, 
+  "role": "System Manager", 
+  "write": 1
+ }, 
+ {
+  "doctype": "DocType", 
+  "name": "Logistics Costs"
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "from_location", 
+  "fieldtype": "Select", 
+  "label": "From Location", 
+  "options": "Lagos State"
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "to_location", 
+  "fieldtype": "Select", 
+  "label": "To Location", 
+  "options": "\nAbia State\nAdamawa State\nAkwa Ibom State\nAnambra State\nBauchi State\nBayelsa State\nBenue State\nBorno State\nCross River State\nDelta State\nEbonyi State\nEdo State\nEkiti State\nEnugu State\nAbuja State\nGombe State\nImo State\nJigawa State\nKaduna State\nKano State\nKatsina State\nKebbi State\nKogi State\nKwara State\nLagos State\nNasarawa State\nNiger State\nOgun State\nOndo State\nOsun State\nOyo State\nPlateau State\nRivers State\nSokoto State\nTaraba State\nYobe State\nZamfara State"
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "weight", 
+  "fieldtype": "Float", 
+  "label": "Weight"
+ }, 
+ {
+  "doctype": "DocField", 
+  "fieldname": "rate", 
+  "fieldtype": "Float", 
+  "label": "Rate"
+ }, 
+ {
+  "doctype": "DocPerm"
+ }
+]
